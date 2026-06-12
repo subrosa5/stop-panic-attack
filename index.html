@@ -96,12 +96,12 @@
       max-width: 480px; line-height: 1.7; margin-bottom: 52px; position: relative;
     }
     .btn-start {
-      position: relative; padding: 18px 64px; font-size: 17px; font-weight: 600;
-      letter-spacing: 0.5px; border: none; border-radius: 50px; cursor: pointer;
-      background: linear-gradient(135deg,#6060ff,#a060f0); color: #fff;
-      box-shadow: 0 0 50px rgba(100,100,255,0.35); transition: transform 0.2s, box-shadow 0.2s;
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,0.35); font-size: 13px; font-weight: 400;
+      letter-spacing: 0.3px; margin-top: 18px; padding: 6px 0;
+      transition: color 0.2s; text-decoration: none;
     }
-    .btn-start:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 0 70px rgba(100,100,255,0.55); }
+    .btn-start:hover { color: rgba(255,255,255,0.6); }
 
     .btn-sos {
       position: relative; padding: 15px 52px; font-size: 15px; font-weight: 700;
@@ -309,18 +309,12 @@
 <!-- ══ LANDING ══ -->
 <section id="landing">
   <div class="lnd-glow"></div>
+  <p style="font-size:12px;color:rgba(255,255,255,0.3);position:relative;margin-bottom:24px;" data-i18n="headphones"></p>
   <p  class="lnd-tag"  data-i18n="lnd-tag"></p>
   <h1 class="lnd-title" data-i18n-html="lnd-title"></h1>
   <p  class="lnd-sub"  data-i18n="lnd-sub"></p>
   <button class="btn-sos"   onclick="startSOS()"  data-i18n="btn-sos"></button>
-  <button class="btn-start" onclick="startApp()" data-i18n="btn-start" style="margin-top:10px;opacity:0.7;transform:scale(0.92);"></button>
-  <p style="margin-top:16px;font-size:12px;color:rgba(255,255,255,0.3);position:relative;" data-i18n="headphones"></p>
-  <div class="lnd-features">
-    <div class="lnd-feat"><span>🌊</span> <span data-i18n="feat-sounds"></span></div>
-    <div class="lnd-feat"><span>💨</span> <span data-i18n="feat-breath"></span></div>
-    <div class="lnd-feat"><span>✨</span> <span data-i18n="feat-visual"></span></div>
-    <div class="lnd-feat"><span>🧠</span> <span data-i18n="feat-ground"></span></div>
-  </div>
+  <button class="btn-start" onclick="startApp()" data-i18n="btn-start"></button>
 </section>
 
 <!-- ══ SOS OVERLAY ══ -->
@@ -407,7 +401,7 @@ const i18n = {
     'sos-l2':       'This is a panic attack — not a heart attack.\nAdrenaline spike. It peaks in 90 seconds and passes.',
     'sos-l3':       'You have survived every panic attack so far.',
     'sos-ready':    'I\'m ready — breathe with me',
-    'btn-start':    'I need calm now',
+    'btn-start':    'just want to breathe →',
     'feat-sounds':  'Calming sounds',
     'feat-breath':  'Breathing guide',
     'feat-visual':  'Live visuals',
@@ -444,7 +438,7 @@ const i18n = {
     'sos-l2':       'Это паническая атака — не инфаркт.\nВыброс адреналина. Пик 90 секунд — и пройдёт.',
     'sos-l3':       'Ты пережил каждую паническую атаку до этого.',
     'sos-ready':    'Я готов — дышать со мной',
-    'btn-start':    'Мне нужно успокоиться',
+    'btn-start':    'просто подышать →',
     'feat-sounds':  'Успокаивающие звуки',
     'feat-breath':  'Дыхательная практика',
     'feat-visual':  'Живые визуалы',
