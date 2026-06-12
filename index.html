@@ -406,8 +406,10 @@
   <canvas id="cvs"></canvas>
 
   <div class="topbar">
-    <button class="tb-btn" onclick="goBack()" data-i18n="back-btn"></button>
-    <button class="tb-info" onclick="openInfo()" title="?">?</button>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button class="tb-btn" onclick="goBack()" data-i18n="back-btn"></button>
+      <button class="tb-info" onclick="openInfo()">?</button>
+    </div>
   </div>
 
   <div class="breath-technique">
@@ -684,9 +686,9 @@ const techPhases = {
     {key:'hold',dur:2, scale:1.0 },
   ],
   sigh: [
-    {key:'in',  dur:1.5, scale:1.25, label:'sigh-in1'},
-    {key:'in',  dur:1.5, scale:1.45, label:'sigh-in2'},
-    {key:'out', dur:8,   scale:1.0  },
+    {key:'in',  dur:2, scale:1.25},
+    {key:'in',  dur:2, scale:1.45},
+    {key:'out', dur:8, scale:1.0 },
   ],
 };
 function setTech(key, btn){
@@ -927,7 +929,7 @@ function runPhase(){
 }
 
 function tick(){
-  document.getElementById('bNum').textContent=secLeft||'';
+  document.getElementById('bNum').textContent=secLeft>0?Math.ceil(secLeft):'';
   if(secLeft<=0){phaseIdx=(phaseIdx+1)%phases.length;bTimer=setTimeout(runPhase,200);}
   else{secLeft--;bTimer=setTimeout(tick,1000);}
 }
