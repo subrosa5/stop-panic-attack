@@ -143,6 +143,52 @@
     .btn-sos-ready.show { opacity: 1; pointer-events: auto; }
     .btn-sos-ready:hover { background: rgba(255,255,255,0.15); }
 
+    /* SOS 90-sec timer */
+    .sos-timer-wrap { width: 100%; max-width: 280px; margin-top: 32px; opacity: 0; transition: opacity 0.6s; }
+    .sos-timer-wrap.show { opacity: 1; }
+    .sos-timer-label { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+    .sos-timer-bar { height: 2px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+    .sos-timer-fill { height: 100%; background: rgba(255,255,255,0.35); border-radius: 2px; width: 100%; transition: width 1s linear; }
+    .sos-timer-sec { font-size: 13px; color: rgba(255,255,255,0.25); margin-top: 6px; }
+
+    /* mood rating overlay */
+    #moodOverlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(6,6,18,0.96); flex-direction: column;
+      align-items: center; justify-content: center; text-align: center; padding: 40px 24px;
+    }
+    #moodOverlay.visible { display: flex; }
+    .mood-title { font-size: clamp(20px,4vw,28px); font-weight: 300; color: rgba(255,255,255,0.85); margin-bottom: 10px; }
+    .mood-sub   { font-size: 14px; color: rgba(255,255,255,0.35); margin-bottom: 36px; }
+    .mood-stars { display: flex; gap: 14px; justify-content: center; margin-bottom: 8px; }
+    .mood-star  { font-size: 36px; cursor: pointer; opacity: 0.3; transition: opacity 0.15s, transform 0.15s; filter: grayscale(1); }
+    .mood-star:hover, .mood-star.sel { opacity: 1; transform: scale(1.2); filter: grayscale(0); }
+    .mood-skip  { margin-top: 24px; font-size: 13px; color: rgba(255,255,255,0.2); cursor: pointer; border: none; background: none; }
+    .mood-skip:hover { color: rgba(255,255,255,0.45); }
+    .mood-result { font-size: clamp(16px,3vw,22px); color: rgba(255,255,255,0.6); margin-top: 16px; min-height: 30px; }
+
+    /* info card overlay */
+    #infoOverlay {
+      display: none; position: fixed; inset: 0; z-index: 250;
+      background: rgba(6,6,18,0.97); flex-direction: column;
+      align-items: center; justify-content: center; padding: 40px 28px; text-align: center;
+    }
+    #infoOverlay.visible { display: flex; }
+    .info-title { font-size: clamp(22px,5vw,32px); font-weight: 300; color: #fff; margin-bottom: 28px; }
+    .info-fact  { font-size: clamp(14px,2.5vw,17px); color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 16px; max-width: 400px; }
+    .info-fact strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+    .info-close { margin-top: 36px; padding: 12px 36px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.15); background: none; color: rgba(255,255,255,0.5); font-size: 14px; cursor: pointer; transition: all 0.2s; }
+    .info-close:hover { border-color: rgba(255,255,255,0.35); color: #fff; }
+
+    /* breath technique toggle */
+    .breath-technique { display: flex; gap: 8px; justify-content: center; margin-bottom: 6px; position: relative; z-index: 10; }
+    .tech-btn { padding: 5px 14px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.35); font-size: 11px; cursor: pointer; transition: all 0.2s; }
+    .tech-btn.on { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.22); color: rgba(255,255,255,0.8); }
+
+    /* info button in topbar */
+    .tb-info { padding: 9px 14px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.35); color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(12px); }
+    .tb-info:hover { color: #fff; border-color: rgba(255,255,255,0.25); }
+
     .lnd-features {
       display: flex; gap: 16px; margin-top: 56px;
       flex-wrap: wrap; justify-content: center; position: relative;
@@ -322,7 +368,36 @@
   <p class="sos-line sos-l1" id="sosL1" data-i18n="sos-l1"></p>
   <p class="sos-line sos-l2" id="sosL2" data-i18n="sos-l2"></p>
   <p class="sos-line sos-l3" id="sosL3" data-i18n="sos-l3"></p>
+  <div class="sos-timer-wrap" id="sosTimerWrap">
+    <div class="sos-timer-label" data-i18n="sos-timer-label"></div>
+    <div class="sos-timer-bar"><div class="sos-timer-fill" id="sosTimerFill"></div></div>
+    <div class="sos-timer-sec" id="sosTimerSec"></div>
+  </div>
   <button class="btn-sos-ready" id="sosReady" onclick="dismissSOS()" data-i18n="sos-ready"></button>
+</div>
+
+<!-- ══ MOOD OVERLAY ══ -->
+<div id="moodOverlay">
+  <p class="mood-title" id="moodTitle" data-i18n="mood-title-before"></p>
+  <p class="mood-sub"   data-i18n="mood-sub"></p>
+  <div class="mood-stars" id="moodStars">
+    <span class="mood-star" onclick="pickMood(1)">😰</span>
+    <span class="mood-star" onclick="pickMood(2)">😟</span>
+    <span class="mood-star" onclick="pickMood(3)">😐</span>
+    <span class="mood-star" onclick="pickMood(4)">🙂</span>
+    <span class="mood-star" onclick="pickMood(5)">😌</span>
+  </div>
+  <p class="mood-result" id="moodResult"></p>
+  <button class="mood-skip" onclick="skipMood()" data-i18n="mood-skip"></button>
+</div>
+
+<!-- ══ INFO OVERLAY ══ -->
+<div id="infoOverlay">
+  <p class="info-title" data-i18n="info-title"></p>
+  <p class="info-fact" data-i18n-html="info-f1"></p>
+  <p class="info-fact" data-i18n-html="info-f2"></p>
+  <p class="info-fact" data-i18n-html="info-f3"></p>
+  <button class="info-close" onclick="closeInfo()" data-i18n="info-close"></button>
 </div>
 
 <!-- ══ APP ══ -->
@@ -332,6 +407,12 @@
 
   <div class="topbar">
     <button class="tb-btn" onclick="goBack()" data-i18n="back-btn"></button>
+    <button class="tb-info" onclick="openInfo()" title="?">?</button>
+  </div>
+
+  <div class="breath-technique">
+    <button class="tech-btn on" id="tech-box"  onclick="setTech('box',this)"  data-i18n="tech-box"></button>
+    <button class="tech-btn"    id="tech-sigh" onclick="setTech('sigh',this)" data-i18n="tech-sigh"></button>
   </div>
 
   <div class="center">
@@ -401,6 +482,18 @@ const i18n = {
     'sos-l2':       'This is a panic attack — not a heart attack.\nAdrenaline spike. It peaks in 90 seconds and passes.',
     'sos-l3':       'You have survived every panic attack so far.',
     'sos-ready':    'I\'m ready — breathe with me',
+    'sos-timer-label': 'panic peaks in',
+    'tech-box':     '4-4-6-2',
+    'tech-sigh':    'Sigh',
+    'mood-title-before': 'How anxious are you right now?',
+    'mood-title-after':  'How do you feel now?',
+    'mood-sub':     'tap to rate',
+    'mood-skip':    'skip',
+    'info-title':   'What\'s happening in your body',
+    'info-f1':      '<strong>Adrenaline surge.</strong> Your brain detected a threat (real or not) and flooded your body with adrenaline. Heart races, chest tightens — it\'s a false alarm.',
+    'info-f2':      '<strong>90-second rule.</strong> A panic attack physically peaks within 90 seconds. After that, if you don\'t re-trigger it with fearful thoughts, it fades.',
+    'info-f3':      '<strong>You are not in danger.</strong> Panic attacks feel terrifying but are not harmful. Every single one has passed — this one will too.',
+    'info-close':   'Got it',
     'btn-start':    'just want to breathe →',
     'feat-sounds':  'Calming sounds',
     'feat-breath':  'Breathing guide',
@@ -438,6 +531,18 @@ const i18n = {
     'sos-l2':       'Это паническая атака — не инфаркт.\nВыброс адреналина. Пик 90 секунд — и пройдёт.',
     'sos-l3':       'Ты пережил каждую паническую атаку до этого.',
     'sos-ready':    'Я готов — дышать со мной',
+    'sos-timer-label': 'паника достигает пика через',
+    'tech-box':     '4-4-6-2',
+    'tech-sigh':    'Вздох',
+    'mood-title-before': 'Насколько тебе тревожно сейчас?',
+    'mood-title-after':  'Как ты себя чувствуешь?',
+    'mood-sub':     'нажми чтобы оценить',
+    'mood-skip':    'пропустить',
+    'info-title':   'Что происходит в твоём теле',
+    'info-f1':      '<strong>Выброс адреналина.</strong> Мозг обнаружил угрозу (реальную или нет) и залил тело адреналином. Сердце колотится, грудь сжимается — это ложная тревога.',
+    'info-f2':      '<strong>Правило 90 секунд.</strong> Паническая атака физически достигает пика в течение 90 секунд. После этого, если не подпитывать её страшными мыслями, она угасает.',
+    'info-f3':      '<strong>Ты не в опасности.</strong> Паника чувствуется ужасно, но не опасна. Каждая атака до этого прошла — эта тоже пройдёт.',
+    'info-close':   'Понятно',
     'btn-start':    'просто подышать →',
     'feat-sounds':  'Успокаивающие звуки',
     'feat-breath':  'Дыхательная практика',
@@ -534,48 +639,133 @@ document.addEventListener('DOMContentLoaded', () => setLang('en'));
 // ══════════════════════════════════════════
 //  NAVIGATION
 // ══════════════════════════════════════════
+// ── mood rating ──────────────────────────────────
+let moodBefore = null;
+function showMood(phase, onDone){
+  const ov = document.getElementById('moodOverlay');
+  document.getElementById('moodTitle').textContent = t(phase==='before'?'mood-title-before':'mood-title-after');
+  document.getElementById('moodResult').textContent = '';
+  document.querySelectorAll('.mood-star').forEach(s=>s.classList.remove('sel'));
+  ov.classList.add('visible');
+  ov._phase = phase;
+  ov._onDone = onDone;
+}
+function pickMood(val){
+  const ov = document.getElementById('moodOverlay');
+  document.querySelectorAll('.mood-star').forEach((s,i)=>s.classList.toggle('sel', i<val));
+  if(ov._phase === 'before'){
+    moodBefore = val;
+    setTimeout(()=>{ ov.classList.remove('visible'); if(ov._onDone) ov._onDone(); }, 500);
+  } else {
+    const diff = moodBefore !== null ? moodBefore - val : null;
+    const res = document.getElementById('moodResult');
+    if(diff !== null && diff > 0) res.textContent = `↓ ${diff} ${t('mood-improved')||'better'}`;
+    else if(diff !== null && diff < 0) res.textContent = `↑ ${Math.abs(diff)} ${t('mood-worse')||''}`;
+    setTimeout(()=>{ ov.classList.remove('visible'); if(ov._onDone) ov._onDone(); moodBefore=null; }, 1200);
+  }
+}
+function skipMood(){
+  const ov = document.getElementById('moodOverlay');
+  ov.classList.remove('visible');
+  if(ov._onDone) ov._onDone();
+  moodBefore = null;
+}
+
+// ── info card ─────────────────────────────────────
+function openInfo(){ document.getElementById('infoOverlay').classList.add('visible'); }
+function closeInfo(){ document.getElementById('infoOverlay').classList.remove('visible'); }
+
+// ── breathing technique ───────────────────────────
+const techPhases = {
+  box:  [
+    {key:'in',  dur:4, scale:1.45},
+    {key:'hold',dur:4, scale:1.45},
+    {key:'out', dur:6, scale:1.0 },
+    {key:'hold',dur:2, scale:1.0 },
+  ],
+  sigh: [
+    {key:'in',  dur:1.5, scale:1.25, label:'sigh-in1'},
+    {key:'in',  dur:1.5, scale:1.45, label:'sigh-in2'},
+    {key:'out', dur:8,   scale:1.0  },
+  ],
+};
+function setTech(key, btn){
+  document.querySelectorAll('.tech-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  phases = techPhases[key];
+  if(currentPhase !== 'idle'){ clearTimeout(bTimer); phaseIdx=0; runPhase(); }
+}
+
+// ── SOS 90-sec timer ──────────────────────────────
+let sosTimerInterval = null;
+function startSosTimer(){
+  let sec = 90;
+  const fill = document.getElementById('sosTimerFill');
+  const secEl = document.getElementById('sosTimerSec');
+  const wrap = document.getElementById('sosTimerWrap');
+  wrap.classList.add('show');
+  fill.style.width = '100%';
+  secEl.textContent = sec + 's';
+  sosTimerInterval = setInterval(()=>{
+    sec--;
+    if(sec <= 0){ sec = 0; clearInterval(sosTimerInterval); }
+    fill.style.width = (sec/90*100) + '%';
+    secEl.textContent = sec + 's';
+  }, 1000);
+}
+function stopSosTimer(){
+  clearInterval(sosTimerInterval);
+  document.getElementById('sosTimerWrap').classList.remove('show');
+}
+
+// ── navigation ────────────────────────────────────
 function startApp() {
   document.getElementById('landing').style.display = 'none';
-  document.getElementById('app').classList.add('visible');
   document.getElementById('hpNote').style.display = 'flex';
-  initCanvas();
-  startBreathing();
+  showMood('before', ()=>{
+    document.getElementById('app').classList.add('visible');
+    initCanvas();
+    startBreathing();
+  });
 }
 
 function startSOS() {
-  // show overlay with staggered text reveal
   document.getElementById('landing').style.display = 'none';
   document.getElementById('hpNote').style.display = 'flex';
   const ov = document.getElementById('sosOverlay');
   ov.classList.add('visible');
-  // reveal lines one by one
   setTimeout(()=> document.getElementById('sosL1').classList.add('show'), 100);
   setTimeout(()=> document.getElementById('sosL2').classList.add('show'), 900);
   setTimeout(()=> document.getElementById('sosL3').classList.add('show'), 2000);
+  setTimeout(()=>{ document.getElementById('sosTimerWrap').classList.add('show'); startSosTimer(); }, 2200);
   setTimeout(()=> document.getElementById('sosReady').classList.add('show'), 3200);
-  // prepare app in background (no breathing yet — don't distract)
   initCanvas();
-  // auto-start pink noise quietly in background
   const btn = document.getElementById('snd-pink');
   if(btn && !btn.classList.contains('on')) toggleSound('pink', btn);
 }
 
 function dismissSOS() {
+  stopSosTimer();
   document.getElementById('sosOverlay').classList.remove('visible');
   document.getElementById('app').classList.add('visible');
   startBreathing();
 }
 
 function goBack() {
+  stopSosTimer();
   stopAllSounds();
   stopBreathing();
-  // reset SOS overlay state
-  const ov = document.getElementById('sosOverlay');
-  ov.classList.remove('visible');
-  ['sosL1','sosL2','sosL3','sosReady'].forEach(id=> document.getElementById(id).classList.remove('show'));
-  document.getElementById('app').classList.remove('visible');
-  document.getElementById('hpNote').style.display = 'none';
-  document.getElementById('landing').style.display = 'flex';
+  showMood('after', ()=>{
+    const ov = document.getElementById('sosOverlay');
+    ov.classList.remove('visible');
+    ['sosL1','sosL2','sosL3','sosReady','sosTimerWrap'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.classList.remove('show');
+    });
+    document.getElementById('app').classList.remove('visible');
+    document.getElementById('hpNote').style.display = 'none';
+    document.getElementById('landing').style.display = 'flex';
+  });
 }
 
 // ══════════════════════════════════════════
@@ -699,12 +889,7 @@ function stopAllSounds() {
 // ══════════════════════════════════════════
 //  BREATHING
 // ══════════════════════════════════════════
-const phases=[
-  {key:'in',   dur:4, scale:1.45},
-  {key:'hold', dur:4, scale:1.45},
-  {key:'out',  dur:6, scale:1.0 },
-  {key:'hold', dur:2, scale:1.0 },
-];
+let phases = techPhases.box;
 let phaseIdx=0, secLeft=0, bTimer=null, currentPhaseKey=null;
 let currentPhase='idle';
 
