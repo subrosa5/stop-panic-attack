@@ -180,10 +180,12 @@
     .info-close { margin-top: 36px; padding: 12px 36px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.15); background: none; color: rgba(255,255,255,0.5); font-size: 14px; cursor: pointer; transition: all 0.2s; }
     .info-close:hover { border-color: rgba(255,255,255,0.35); color: #fff; }
 
-    /* breath technique toggle */
-    .breath-technique { display: flex; gap: 8px; justify-content: center; margin-bottom: 6px; position: relative; z-index: 10; }
-    .tech-btn { padding: 5px 14px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.35); font-size: 11px; cursor: pointer; transition: all 0.2s; }
-    .tech-btn.on { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.22); color: rgba(255,255,255,0.8); }
+    /* 90s panic timer on breathing screen */
+    #panicTimer { margin-top: 22px; width: 200px; text-align: center; }
+    .ptimer-bar  { height: 1px; background: rgba(255,255,255,0.08); border-radius: 1px; overflow: hidden; }
+    .ptimer-fill { height: 100%; width: 100%; background: linear-gradient(90deg, rgba(255,255,255,0.15), rgba(255,255,255,0.4)); border-radius: 1px; transition: width 1s linear; }
+    .ptimer-label { margin-top: 7px; font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,0.2); text-transform: uppercase; transition: opacity 0.6s; }
+    @keyframes ptimerDone { 0%{opacity:0;transform:scale(0.95)} 30%{opacity:1;transform:scale(1)} 70%{opacity:1} 100%{opacity:0} }
 
     /* info button in topbar */
     .tb-info { padding: 9px 14px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.35); color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(12px); }
@@ -368,11 +370,6 @@
   <p class="sos-line sos-l1" id="sosL1" data-i18n="sos-l1"></p>
   <p class="sos-line sos-l2" id="sosL2" data-i18n="sos-l2"></p>
   <p class="sos-line sos-l3" id="sosL3" data-i18n="sos-l3"></p>
-  <div class="sos-timer-wrap" id="sosTimerWrap">
-    <div class="sos-timer-label" data-i18n="sos-timer-label"></div>
-    <div class="sos-timer-bar"><div class="sos-timer-fill" id="sosTimerFill"></div></div>
-    <div class="sos-timer-sec" id="sosTimerSec"></div>
-  </div>
   <button class="btn-sos-ready" id="sosReady" onclick="dismissSOS()" data-i18n="sos-ready"></button>
 </div>
 
@@ -412,11 +409,6 @@
     </div>
   </div>
 
-  <div class="breath-technique">
-    <button class="tech-btn on" id="tech-box"  onclick="setTech('box',this)"  data-i18n="tech-box"></button>
-    <button class="tech-btn"    id="tech-sigh" onclick="setTech('sigh',this)" data-i18n="tech-sigh"></button>
-  </div>
-
   <div class="center">
     <div class="ring ring-3" id="ringOuter">
       <div class="ring ring-2">
@@ -425,6 +417,12 @@
     </div>
     <div class="breath-phase" id="bPhase" data-i18n="tap-hint"></div>
     <div class="breath-num"  id="bNum"></div>
+
+    <!-- 90s panic timer — only shown after SOS -->
+    <div id="panicTimer" style="display:none;">
+      <div class="ptimer-bar"><div class="ptimer-fill" id="ptimerFill"></div></div>
+      <div class="ptimer-label" id="ptimerLabel"></div>
+    </div>
   </div>
 
   <div class="sound-section">
@@ -678,46 +676,34 @@ function openInfo(){ document.getElementById('infoOverlay').classList.add('visib
 function closeInfo(){ document.getElementById('infoOverlay').classList.remove('visible'); }
 
 // ── breathing technique ───────────────────────────
-const techPhases = {
-  box:  [
-    {key:'in',  dur:4, scale:1.45},
-    {key:'hold',dur:4, scale:1.45},
-    {key:'out', dur:6, scale:1.0 },
-    {key:'hold',dur:2, scale:1.0 },
-  ],
-  sigh: [
-    {key:'in',  dur:2, scale:1.25},
-    {key:'in',  dur:2, scale:1.45},
-    {key:'out', dur:8, scale:1.0 },
-  ],
-};
-function setTech(key, btn){
-  document.querySelectorAll('.tech-btn').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  phases = techPhases[key];
-  if(currentPhase !== 'idle'){ clearTimeout(bTimer); phaseIdx=0; runPhase(); }
-}
-
-// ── SOS 90-sec timer ──────────────────────────────
+// ── SOS 90-sec timer (on breathing screen) ───────
 let sosTimerInterval = null;
-function startSosTimer(){
+function startPanicTimer(){
   let sec = 90;
-  const fill = document.getElementById('sosTimerFill');
-  const secEl = document.getElementById('sosTimerSec');
-  const wrap = document.getElementById('sosTimerWrap');
-  wrap.classList.add('show');
+  const wrap  = document.getElementById('panicTimer');
+  const fill  = document.getElementById('ptimerFill');
+  const label = document.getElementById('ptimerLabel');
+  wrap.style.display = 'block';
   fill.style.width = '100%';
-  secEl.textContent = sec + 's';
+  label.textContent = sec + 's';
+  label.style.opacity = '1';
   sosTimerInterval = setInterval(()=>{
     sec--;
-    if(sec <= 0){ sec = 0; clearInterval(sosTimerInterval); }
+    if(sec <= 0){
+      clearInterval(sosTimerInterval);
+      fill.style.width = '0%';
+      label.textContent = t('timer-done') || '✓';
+      label.style.animation = 'ptimerDone 2.5s ease forwards';
+      setTimeout(()=>{ wrap.style.display='none'; label.style.animation=''; }, 2600);
+      return;
+    }
     fill.style.width = (sec/90*100) + '%';
-    secEl.textContent = sec + 's';
+    label.textContent = sec + 's';
   }, 1000);
 }
-function stopSosTimer(){
+function stopPanicTimer(){
   clearInterval(sosTimerInterval);
-  document.getElementById('sosTimerWrap').classList.remove('show');
+  document.getElementById('panicTimer').style.display = 'none';
 }
 
 // ── navigation ────────────────────────────────────
@@ -739,7 +725,6 @@ function startSOS() {
   setTimeout(()=> document.getElementById('sosL1').classList.add('show'), 100);
   setTimeout(()=> document.getElementById('sosL2').classList.add('show'), 900);
   setTimeout(()=> document.getElementById('sosL3').classList.add('show'), 2000);
-  setTimeout(()=>{ document.getElementById('sosTimerWrap').classList.add('show'); startSosTimer(); }, 2200);
   setTimeout(()=> document.getElementById('sosReady').classList.add('show'), 3200);
   initCanvas();
   const btn = document.getElementById('snd-pink');
@@ -747,20 +732,20 @@ function startSOS() {
 }
 
 function dismissSOS() {
-  stopSosTimer();
   document.getElementById('sosOverlay').classList.remove('visible');
   document.getElementById('app').classList.add('visible');
   startBreathing();
+  startPanicTimer();
 }
 
 function goBack() {
-  stopSosTimer();
+  stopPanicTimer();
   stopAllSounds();
   stopBreathing();
   showMood('after', ()=>{
     const ov = document.getElementById('sosOverlay');
     ov.classList.remove('visible');
-    ['sosL1','sosL2','sosL3','sosReady','sosTimerWrap'].forEach(id=>{
+    ['sosL1','sosL2','sosL3','sosReady'].forEach(id=>{
       const el = document.getElementById(id);
       if(el) el.classList.remove('show');
     });
@@ -891,7 +876,12 @@ function stopAllSounds() {
 // ══════════════════════════════════════════
 //  BREATHING
 // ══════════════════════════════════════════
-let phases = techPhases.box;
+let phases = [
+  {key:'in',  dur:4, scale:1.45},
+  {key:'hold',dur:4, scale:1.45},
+  {key:'out', dur:6, scale:1.0 },
+  {key:'hold',dur:2, scale:1.0 },
+];
 let phaseIdx=0, secLeft=0, bTimer=null, currentPhaseKey=null;
 let currentPhase='idle';
 
