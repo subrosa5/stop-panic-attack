@@ -263,7 +263,8 @@
       font-size: 12px; cursor: pointer; transition: all 0.25s;
       backdrop-filter: blur(10px); white-space: nowrap;
     }
-    .snd-btn .icon { font-size: 14px; line-height: 1; }
+    .snd-btn .icon { display:flex; align-items:center; justify-content:center; opacity:0.7; }
+    .snd-btn.on .icon { opacity:1; }
     .snd-btn .snd-label { font-size: 12px; }
     .snd-btn .dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.12); transition: all 0.3s; flex-shrink: 0; }
     .snd-btn:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.7); }
@@ -428,12 +429,12 @@
   <div class="sound-section">
     <span class="sound-section-label" data-i18n="sounds-label"></span>
     <div class="sound-row">
-      <button class="snd-btn" id="snd-pink"     onclick="toggleSound('pink',    this)"><span class="icon">🌫️</span><span class="snd-label" data-i18n="snd-pink"></span><div class="dot"></div></button>
-      <button class="snd-btn" id="snd-brown"    onclick="toggleSound('brown',   this)"><span class="icon">🌑</span><span class="snd-label" data-i18n="snd-brown"></span><div class="dot"></div></button>
-      <button class="snd-btn" id="snd-binaural" onclick="toggleSound('binaural',this)"><span class="icon">🎵</span><span class="snd-label" data-i18n="snd-binaural"></span><div class="dot"></div></button>
-      <button class="snd-btn" id="snd-ocean"    onclick="toggleSound('ocean',   this)"><span class="icon">🌊</span><span class="snd-label" data-i18n="snd-ocean"></span><div class="dot"></div></button>
-      <button class="snd-btn" id="snd-wind"     onclick="toggleSound('wind',    this)"><span class="icon">🌬️</span><span class="snd-label" data-i18n="snd-wind"></span><div class="dot"></div></button>
-      <button class="snd-btn" id="snd-stream"   onclick="toggleSound('stream',  this)"><span class="icon">🏞️</span><span class="snd-label" data-i18n="snd-stream"></span><div class="dot"></div></button>
+      <button class="snd-btn" id="snd-pink"     onclick="toggleSound('pink',    this)"><span class="icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,9 2.5,5 4,11 5.5,4 7,13 8.5,7 10,11 11.5,5 13,10 14.5,7 17,9"/></svg></span><span class="snd-label" data-i18n="snd-pink"></span><div class="dot"></div></button>
+      <button class="snd-btn" id="snd-brown"    onclick="toggleSound('brown',   this)"><span class="icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1,9 C4,9 4,4 9,4 C14,4 14,14 17,9"/><path d="M1,11 C3.5,11 3.5,7.5 9,7.5 C14.5,7.5 14.5,12 17,12" stroke-opacity="0.35"/></svg></span><span class="snd-label" data-i18n="snd-brown"></span><div class="dot"></div></button>
+      <button class="snd-btn" id="snd-binaural" onclick="toggleSound('binaural',this)"><span class="icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3,10 L3,8.5 A6,6 0 0,1 15,8.5 L15,10"/><rect x="1.5" y="9.5" width="3" height="5" rx="1.5"/><rect x="13.5" y="9.5" width="3" height="5" rx="1.5"/></svg></span><span class="snd-label" data-i18n="snd-binaural"></span><div class="dot"></div></button>
+      <button class="snd-btn" id="snd-ocean"    onclick="toggleSound('ocean',   this)"><span class="icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1,7.5 C3,5.5 5,9.5 7,7.5 C9,5.5 11,9.5 13,7.5 C15,5.5 17,7.5 17,7.5"/><path d="M1,11.5 C3,9.5 5,13.5 7,11.5 C9,9.5 11,13.5 13,11.5 C15,9.5 17,11.5 17,11.5" stroke-opacity="0.4"/></svg></span><span class="snd-label" data-i18n="snd-ocean"></span><div class="dot"></div></button>
+      <button class="snd-btn" id="snd-wind"     onclick="toggleSound('wind',    this)"><span class="icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1,7 L11,7 C13,7 14,5 12.5,4 C11,3 10,5 11,6"/><path d="M1,10 L14,10"/><path d="M1,13 L9,13 C11,13 12,15 10.5,16 C9,17 8,15 9,14"/></svg></span><span class="snd-label" data-i18n="snd-wind"></span><div class="dot"></div></button>
+      <button class="snd-btn" id="snd-stream"   onclick="toggleSound('stream',  this)"><span class="icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M7,2 C7,2 4,6 4,8.5 A3,3 0 0,0 10,8.5 C10,6 7,2 7,2 Z"/><path d="M13,9 C13,9 11,12 11,13.5 A2,2 0 0,0 15,13.5 C15,12 13,9 13,9 Z" stroke-opacity="0.5"/></svg></span><span class="snd-label" data-i18n="snd-stream"></span><div class="dot"></div></button>
     </div>
   </div>
 
