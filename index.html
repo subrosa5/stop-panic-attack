@@ -719,6 +719,10 @@ function startApp() {
 }
 
 function startSOS() {
+  // create + resume AudioContext immediately during user gesture
+  const c = actxGet();
+  c.resume();
+
   document.getElementById('landing').style.display = 'none';
   document.getElementById('hpNote').style.display = 'flex';
   const ov = document.getElementById('sosOverlay');
@@ -735,8 +739,11 @@ function dismissSOS() {
   document.getElementById('app').classList.add('visible');
   startBreathing();
   startPanicTimer();
-  const btn = document.getElementById('snd-pink');
-  if(btn && !btn.classList.contains('on')) toggleSound('pink', btn);
+  // AudioContext already running — start pink noise
+  actxGet().resume().then(()=>{
+    const btn = document.getElementById('snd-pink');
+    if(btn && !btn.classList.contains('on')) toggleSound('pink', btn);
+  });
 }
 
 function goBack() {
