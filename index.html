@@ -187,9 +187,9 @@
     .ptimer-label { margin-top: 7px; font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,0.2); text-transform: uppercase; transition: opacity 0.6s; }
     @keyframes ptimerDone { 0%{opacity:0;transform:scale(0.95)} 30%{opacity:1;transform:scale(1)} 70%{opacity:1} 100%{opacity:0} }
 
-    /* info button — right side of topbar */
-    .tb-info { padding: 7px 14px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); background: none; color: rgba(255,255,255,0.35); font-size: 11px; letter-spacing: 0.3px; cursor: pointer; transition: all 0.2s; white-space: nowrap; font-family: inherit; }
-    .tb-info:hover { color: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.2); }
+    /* info link — below grounding button */
+    .info-link { margin-top: 14px; padding: 0; border: none; background: none; color: rgba(220,80,80,0.6); font-size: 12px; letter-spacing: 0.3px; cursor: pointer; transition: color 0.2s; font-family: inherit; }
+    .info-link:hover { color: rgba(220,80,80,1); }
 
     .lnd-features {
       display: flex; gap: 16px; margin-top: 56px;
@@ -202,7 +202,7 @@
     }
 
     /* ══════════ APP ══════════ */
-    #app { display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: relative; overflow: hidden; }
+    #app { display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px 40px; position: relative; overflow-x: hidden; overflow-y: auto; }
     #app.visible { display: flex; }
 
     .app-bg { position: fixed; inset: 0; transition: background 3s ease; z-index: 0; }
@@ -215,8 +215,7 @@
 
     .topbar {
       position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 115px 16px 24px;
+      display: flex; align-items: center; justify-content: space-between; padding: 16px 24px;
     }
     .tb-btn {
       padding: 9px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);
@@ -406,7 +405,6 @@
 
   <div class="topbar">
     <button class="tb-btn" onclick="goBack()" data-i18n="back-btn"></button>
-    <button class="tb-info" onclick="openInfo()" data-i18n="info-btn"></button>
   </div>
 
   <div class="center">
@@ -445,6 +443,7 @@
   </div>
 
   <button class="ground-btn" onclick="openGrounding()" data-i18n="ground-btn"></button>
+  <button class="info-link" onclick="openInfo()" data-i18n="info-btn"></button>
 </section>
 
 <!-- headphones note: shown only when app is active -->
