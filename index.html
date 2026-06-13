@@ -728,8 +728,6 @@ function startSOS() {
   setTimeout(()=> document.getElementById('sosL3').classList.add('show'), 2000);
   setTimeout(()=> document.getElementById('sosReady').classList.add('show'), 3200);
   initCanvas();
-  const btn = document.getElementById('snd-pink');
-  if(btn && !btn.classList.contains('on')) toggleSound('pink', btn);
 }
 
 function dismissSOS() {
@@ -737,6 +735,8 @@ function dismissSOS() {
   document.getElementById('app').classList.add('visible');
   startBreathing();
   startPanicTimer();
+  const btn = document.getElementById('snd-pink');
+  if(btn && !btn.classList.contains('on')) toggleSound('pink', btn);
 }
 
 function goBack() {
@@ -764,6 +764,7 @@ const activeSounds = {};
 
 function actxGet() {
   if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+  if (actx.state === 'suspended') actx.resume();
   return actx;
 }
 function fadeIn(g, val=0.35, dur=2) { g.gain.setValueAtTime(0,actxGet().currentTime); g.gain.linearRampToValueAtTime(val,actxGet().currentTime+dur); }
