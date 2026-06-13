@@ -187,9 +187,15 @@
     .ptimer-label { margin-top: 7px; font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,0.2); text-transform: uppercase; transition: opacity 0.6s; }
     @keyframes ptimerDone { 0%{opacity:0;transform:scale(0.95)} 30%{opacity:1;transform:scale(1)} 70%{opacity:1} 100%{opacity:0} }
 
-    /* info link — below grounding button */
-    .info-link { margin-top: 14px; padding: 0; border: none; background: none; color: rgba(220,80,80,0.6); font-size: 12px; letter-spacing: 0.3px; cursor: pointer; transition: color 0.2s; font-family: inherit; }
-    .info-link:hover { color: rgba(220,80,80,1); }
+    /* info link — fixed bottom center */
+    .info-link {
+      position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+      z-index: 51;
+      padding: 0; border: none; background: none;
+      color: rgba(210,70,70,0.55); font-size: 12px; letter-spacing: 0.5px;
+      cursor: pointer; transition: color 0.2s; font-family: inherit; white-space: nowrap;
+    }
+    .info-link:hover { color: rgba(230,100,100,0.9); }
 
     .lnd-features {
       display: flex; gap: 16px; margin-top: 56px;
@@ -202,7 +208,7 @@
     }
 
     /* ══════════ APP ══════════ */
-    #app { display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px 40px; position: relative; overflow-x: hidden; overflow-y: auto; }
+    #app { display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px 65px; position: relative; overflow-x: hidden; overflow-y: auto; }
     #app.visible { display: flex; }
 
     .app-bg { position: fixed; inset: 0; transition: background 3s ease; z-index: 0; }
