@@ -474,9 +474,10 @@
     .ai-panel.open { transform: translateY(0); }
 
     .ai-header {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
       padding: 20px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0;
     }
+    .ai-header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .ai-header-info { display: flex; flex-direction: column; gap: 4px; }
     .ai-header-title { font-size: 16px; font-weight: 500; color: rgba(255,255,255,0.9); }
     .ai-header-sub { font-size: 11px; color: rgba(100,160,255,0.55); letter-spacing: 1.5px; text-transform: uppercase; }
@@ -538,6 +539,21 @@
     }
     .ai-send:hover{transform:scale(1.06);box-shadow:0 0 24px rgba(80,140,255,0.5)}
     .ai-send:disabled{opacity:0.35;cursor:not-allowed;transform:none}
+
+    .ai-voice-toggle {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      border: 1px solid rgba(100,160,255,0.22); background: rgba(60,120,255,0.08);
+      color: rgba(100,180,255,0.75); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+    }
+    .ai-voice-toggle:hover { background: rgba(60,120,255,0.18); color: rgba(140,200,255,0.95); }
+    .ai-voice-toggle.muted { color: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.1); background: transparent; }
+    .ai-msg-row { display: flex; align-items: flex-end; gap: 6px; align-self: flex-start; }
+    .ai-speak-btn {
+      flex-shrink: 0; background: none; border: none; cursor: pointer;
+      font-size: 13px; opacity: 0.28; transition: opacity 0.2s; padding: 0 2px; line-height: 1;
+    }
+    .ai-speak-btn:hover { opacity: 0.75; }
   </style>
 </head>
 <body>
@@ -675,7 +691,16 @@
       <span class="ai-header-title" data-i18n="ai-title"></span>
       <span class="ai-header-sub" data-i18n="ai-sub"></span>
     </div>
-    <button class="ai-close" onclick="toggleAiChat()">×</button>
+    <div class="ai-header-actions">
+      <button class="ai-voice-toggle" id="aiVoiceToggle" onclick="toggleVoice()" title="Голос">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+        </svg>
+      </button>
+      <button class="ai-close" onclick="toggleAiChat()">×</button>
+    </div>
   </div>
   <div class="ai-messages" id="aiMessages"></div>
   <div class="ai-input-row">
@@ -1428,10 +1453,37 @@ const AI_SYSTEM_PROMPT = `Ты — цифровой психолог в прил
 let aiChatHistory = [];
 let aiOpen = false;
 let aiTyping = false;
+let voiceEnabled = true;
+
+function speakText(text) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang === 'ru' ? 'ru-RU' : 'en-US';
+  u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
+
+function speakIdx(i) {
+  if (aiChatHistory[i]) speakText(aiChatHistory[i].content);
+}
+
+function toggleVoice() {
+  voiceEnabled = !voiceEnabled;
+  const btn = document.getElementById('aiVoiceToggle');
+  btn.classList.toggle('muted', !voiceEnabled);
+  if (voiceEnabled) {
+    btn.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+  } else {
+    btn.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
+    speechSynthesis.cancel();
+  }
+}
 
 function toggleAiChat() {
   aiOpen = !aiOpen;
   document.getElementById('aiPanel').classList.toggle('open', aiOpen);
+  if (!aiOpen && 'speechSynthesis' in window) speechSynthesis.cancel();
   if (aiOpen && aiChatHistory.length === 0) {
     const greeting = t('ai-greeting');
     aiChatHistory = [{ role: 'assistant', content: greeting }];
@@ -1442,9 +1494,12 @@ function toggleAiChat() {
 
 function renderAiMessages() {
   const container = document.getElementById('aiMessages');
-  container.innerHTML = aiChatHistory.map(m =>
-    `<div class="ai-msg ${m.role === 'user' ? 'user' : 'bot'}">${escHtml(m.content)}</div>`
-  ).join('');
+  container.innerHTML = aiChatHistory.map((m, i) => {
+    if (m.role === 'user') {
+      return `<div class="ai-msg user">${escHtml(m.content)}</div>`;
+    }
+    return `<div class="ai-msg-row"><div class="ai-msg bot">${escHtml(m.content)}</div><button class="ai-speak-btn" onclick="speakIdx(${i})" title="Озвучить">🔊</button></div>`;
+  }).join('');
   container.scrollTop = container.scrollHeight;
 }
 
@@ -1484,6 +1539,7 @@ async function sendAiMessage() {
     hideAiTyping();
     aiChatHistory.push({ role: 'assistant', content: reply });
     renderAiMessages();
+    if (voiceEnabled) speakText(reply);
   } catch(e) {
     hideAiTyping();
     aiChatHistory.push({ role: 'assistant', content: '⚠ ' + e.message });
