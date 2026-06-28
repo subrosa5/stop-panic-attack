@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Calm — Panic Relief</title>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -191,11 +191,22 @@
     .info-link {
       position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
       z-index: 51;
-      padding: 0; border: none; background: none;
-      color: rgba(210,70,70,0.55); font-size: 12px; letter-spacing: 0.5px;
-      cursor: pointer; transition: color 0.2s; font-family: inherit; white-space: nowrap;
+      padding: 9px 22px;
+      border: 1px solid rgba(210,70,70,0.3);
+      border-radius: 50px;
+      background: rgba(210,70,70,0.07);
+      backdrop-filter: blur(12px);
+      color: rgba(210,70,70,0.65); font-size: 12px; letter-spacing: 0.5px;
+      cursor: pointer; transition: all 0.25s; font-family: inherit; white-space: nowrap;
+      box-shadow: 0 0 12px rgba(210,70,70,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
     }
-    .info-link:hover { color: rgba(230,100,100,0.9); }
+    .info-link:hover {
+      color: rgba(235,100,100,1);
+      border-color: rgba(230,90,90,0.55);
+      background: rgba(210,70,70,0.14);
+      box-shadow: 0 0 22px rgba(210,70,70,0.22), inset 0 1px 0 rgba(255,255,255,0.07);
+      transform: translateX(-50%) translateY(-1px);
+    }
 
     .lnd-features {
       display: flex; gap: 16px; margin-top: 56px;
@@ -350,15 +361,192 @@
     }
     .g-nav-btn.primary { background: rgba(255,180,50,0.15); border-color: rgba(255,200,100,0.3); color: #ffcc66; }
     .g-nav-btn:hover { filter: brightness(1.2); }
+
+    /* ══════════ MOBILE ══════════ */
+    @media (max-width: 480px) {
+      /* Landing */
+      #landing { padding: 72px 20px 36px; }
+      .lnd-sub  { margin-bottom: 36px; font-size: 15px; }
+
+      /* App layout — flex-start so scroll works */
+      #app { justify-content: flex-start; padding: 68px 16px 110px; }
+      .center { gap: 16px; }
+
+      /* Smaller ring */
+      .ring-3 { width: 210px; height: 210px; }
+      .ring-2 { width: 168px; height: 168px; }
+      .ring-1 { width: 126px; height: 126px; box-shadow: 0 0 50px rgba(112,112,255,0.4); }
+      .mode-aurora .ring-1 { box-shadow: 0 0 50px rgba(80,224,144,0.35); }
+      .mode-ocean  .ring-1 { box-shadow: 0 0 50px rgba(80,144,255,0.35); }
+      .mode-sunset .ring-1 { box-shadow: 0 0 50px rgba(255,96,144,0.35); }
+
+      /* Breathing text */
+      .breath-phase { font-size: 15px; letter-spacing: 2px; }
+      .breath-num   { font-size: 38px; min-height: 48px; }
+
+      /* Topbar */
+      .topbar { padding: 10px 14px; }
+      .tb-btn { padding: 7px 15px; font-size: 12px; }
+
+      /* Hide headphones note — overlaps topbar */
+      .headphones-note { display: none; }
+
+      /* Sound buttons */
+      .sound-section { margin-top: 20px; gap: 8px; }
+      .sound-row { gap: 6px; max-width: 100%; }
+      .snd-btn { padding: 7px 11px; font-size: 11px; gap: 5px; }
+      .snd-btn .snd-label { font-size: 11px; }
+      .snd-btn svg { width: 15px; height: 15px; }
+
+      /* Mode buttons */
+      .mode-row { margin-top: 14px; gap: 6px; }
+      .mode-btn { padding: 7px 14px; font-size: 11px; }
+
+      /* Ground button */
+      .ground-btn { margin-top: 14px; padding: 11px 22px; font-size: 12px; }
+
+      /* info-link — bottom-left, не перекрывает FAB */
+      .info-link {
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        left: 16px; transform: none; font-size: 11px; padding: 8px 14px;
+      }
+      .info-link:hover { transform: translateY(-1px); }
+
+      /* AI FAB — bottom-right, выше safe area iPhone */
+      .ai-btn {
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        right: 14px; padding: 11px 16px 11px 12px; font-size: 12px;
+        box-shadow: 0 0 20px rgba(60,120,255,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+      }
+
+      /* Grounding card */
+      .ground-card { padding: 22px 18px; border-radius: 18px; }
+      .ground-step-title { font-size: 20px; }
+      .ground-step-desc  { font-size: 13px; margin-bottom: 18px; }
+      .g-nav-btn { padding: 11px; font-size: 13px; }
+
+      /* AI chat panel */
+      .ai-header { padding: 16px 18px 12px; }
+      .ai-header-title { font-size: 15px; }
+      .ai-messages { padding: 16px; gap: 10px; }
+      .ai-msg { font-size: 13px; padding: 10px 14px; }
+      .ai-input-row { padding: 10px 14px 22px; gap: 8px; }
+      .ai-input { padding: 11px 16px; font-size: 14px; }
+      .ai-send { width: 42px; height: 42px; }
+
+      /* Lang switcher */
+      .lang-switcher { top: 12px; right: 12px; }
+      .lang-btn { padding: 4px 10px; font-size: 11px; }
+
+      /* Panic timer */
+      #panicTimer { width: 160px; }
+    }
+
+    /* ══════════ AI CHAT ══════════ */
+    .ai-btn {
+      display: none;
+      position: fixed; bottom: 26px; right: 22px; z-index: 52;
+      align-items: center; gap: 8px;
+      padding: 11px 18px 11px 14px; border-radius: 50px;
+      border: 1px solid rgba(80,160,255,0.35);
+      background: rgba(10,10,36,0.85);
+      backdrop-filter: blur(14px);
+      color: rgba(130,185,255,0.9); font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all 0.25s; font-family: inherit;
+      box-shadow: 0 0 18px rgba(60,120,255,0.2), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .ai-btn.visible { display: flex; }
+    .ai-btn:hover {
+      background: rgba(20,20,60,0.95);
+      border-color: rgba(110,170,255,0.6);
+      color: #aad4ff;
+      box-shadow: 0 0 28px rgba(60,120,255,0.38), inset 0 1px 0 rgba(255,255,255,0.09);
+      transform: translateY(-2px);
+    }
+    .ai-btn svg { flex-shrink: 0; opacity: 0.85; }
+
+    .ai-panel {
+      position: fixed; inset: 0; z-index: 1100;
+      display: flex; flex-direction: column;
+      background: rgba(5,5,18,0.98); backdrop-filter: blur(24px);
+      transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.32,0,0.2,1);
+    }
+    .ai-panel.open { transform: translateY(0); }
+
+    .ai-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0;
+    }
+    .ai-header-info { display: flex; flex-direction: column; gap: 4px; }
+    .ai-header-title { font-size: 16px; font-weight: 500; color: rgba(255,255,255,0.9); }
+    .ai-header-sub { font-size: 11px; color: rgba(100,160,255,0.55); letter-spacing: 1.5px; text-transform: uppercase; }
+    .ai-close {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.45); font-size: 20px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+    }
+    .ai-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+    .ai-messages {
+      flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .ai-messages::-webkit-scrollbar { width: 3px; }
+    .ai-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+    .ai-msg { max-width: 80%; padding: 12px 16px; font-size: 14px; line-height: 1.6; animation: msgIn 0.3s ease; }
+    @keyframes msgIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .ai-msg.bot {
+      align-self: flex-start;
+      background: rgba(60,130,255,0.09); border: 1px solid rgba(60,130,255,0.14);
+      color: rgba(255,255,255,0.85); border-radius: 4px 18px 18px 18px;
+    }
+    .ai-msg.user {
+      align-self: flex-end;
+      background: rgba(112,112,255,0.16); border: 1px solid rgba(112,112,255,0.22);
+      color: rgba(255,255,255,0.9); border-radius: 18px 4px 18px 18px;
+    }
+    .ai-typing {
+      align-self: flex-start; display: flex; gap: 5px; padding: 14px 18px;
+      background: rgba(60,130,255,0.07); border: 1px solid rgba(60,130,255,0.1);
+      border-radius: 4px 18px 18px 18px;
+    }
+    .ai-typing span {
+      width: 6px; height: 6px; border-radius: 50%; background: rgba(100,160,255,0.55);
+      animation: typingDot 1.2s ease-in-out infinite;
+    }
+    .ai-typing span:nth-child(2){animation-delay:0.2s}
+    .ai-typing span:nth-child(3){animation-delay:0.4s}
+    @keyframes typingDot{0%,60%,100%{transform:scale(1);opacity:0.4}30%{transform:scale(1.3);opacity:1}}
+
+    .ai-input-row {
+      display: flex; gap: 10px; padding: 14px 20px 30px;
+      border-top: 1px solid rgba(255,255,255,0.06); flex-shrink: 0;
+    }
+    .ai-input {
+      flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50px; padding: 12px 20px; color: #fff; font-size: 14px; font-family: inherit;
+      outline: none; transition: border-color 0.2s;
+    }
+    .ai-input::placeholder { color: rgba(255,255,255,0.22); }
+    .ai-input:focus { border-color: rgba(100,160,255,0.4); }
+    .ai-send {
+      width: 46px; height: 46px; border-radius: 50%; border: none; flex-shrink: 0;
+      background: linear-gradient(135deg,#4a8fff,#7060ff); color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+      box-shadow: 0 0 16px rgba(80,140,255,0.3);
+    }
+    .ai-send:hover{transform:scale(1.06);box-shadow:0 0 24px rgba(80,140,255,0.5)}
+    .ai-send:disabled{opacity:0.35;cursor:not-allowed;transform:none}
   </style>
 </head>
 <body>
 
 <!-- ── LANGUAGE SWITCHER ── -->
 <div class="lang-switcher">
-  <button class="lang-btn active" id="lang-en" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
   <span class="lang-sep">|</span>
-  <button class="lang-btn" id="lang-ru" onclick="setLang('ru')">RU</button>
+  <button class="lang-btn active" id="lang-ru" onclick="setLang('ru')">RU</button>
 </div>
 
 <!-- ══ LANDING ══ -->
@@ -471,11 +659,42 @@
   </div>
 </div>
 
+<!-- ══ AI FAB BUTTON ══ -->
+<button class="ai-btn" id="aiFab" onclick="toggleAiChat()">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 1C4.13 1 1 3.69 1 7c0 1.4.54 2.68 1.44 3.7L1.5 14l3.6-1.1A7.4 7.4 0 0 0 8 13c3.87 0 7-2.69 7-6s-3.13-6-7-6Z"/>
+    <path d="M5 7h.01M8 7h.01M11 7h.01" stroke-width="2"/>
+  </svg>
+  <span data-i18n="ai-btn-short"></span>
+</button>
+
+<!-- ══ AI CHAT PANEL ══ -->
+<div class="ai-panel" id="aiPanel">
+  <div class="ai-header">
+    <div class="ai-header-info">
+      <span class="ai-header-title" data-i18n="ai-title"></span>
+      <span class="ai-header-sub" data-i18n="ai-sub"></span>
+    </div>
+    <button class="ai-close" onclick="toggleAiChat()">×</button>
+  </div>
+  <div class="ai-messages" id="aiMessages"></div>
+  <div class="ai-input-row">
+    <input class="ai-input" id="aiInput" type="text"
+      data-i18n-placeholder="ai-placeholder"
+      onkeydown="aiKeydown(event)" autocomplete="off">
+    <button class="ai-send" id="aiSend" onclick="sendAiMessage()">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M3 10L17 10M17 10L11 4M17 10L11 16" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════════
 //  I18N
 // ══════════════════════════════════════════
-let lang = 'en';
+let lang = 'ru';
 
 const i18n = {
   en: {
@@ -527,6 +746,12 @@ const i18n = {
     'phase-in':     'Breathe in',
     'phase-hold':   'Hold',
     'phase-out':    'Breathe out',
+    'ai-btn':       '✦ AI Psychologist',
+    'ai-btn-short': 'AI Psychologist',
+    'ai-title':     'AI Psychologist',
+    'ai-sub':       'Safe space · Always here',
+    'ai-placeholder': 'How are you feeling...',
+    'ai-greeting':  'Hi. I am here with you. How are you feeling right now?',
   },
   ru: {
     'lnd-tag':      'Помощь при панике',
@@ -577,6 +802,12 @@ const i18n = {
     'phase-in':     'Вдох',
     'phase-hold':   'Задержка',
     'phase-out':    'Выдох',
+    'ai-btn':       '✦ ИИ-психолог',
+    'ai-btn-short': 'ИИ-психолог',
+    'ai-title':     'ИИ-психолог',
+    'ai-sub':       'Безопасное пространство · Всегда рядом',
+    'ai-placeholder': 'Как ты себя чувствуешь...',
+    'ai-greeting':  'Привет. Я здесь, рядом с тобой. Как ты себя чувствуешь прямо сейчас?',
   }
 };
 
@@ -630,6 +861,9 @@ function setLang(l) {
   document.querySelectorAll('[data-i18n-html]').forEach(el => {
     el.innerHTML = t(el.getAttribute('data-i18n-html'));
   });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+  });
 
   // re-render grounding if open
   if (document.getElementById('gPanel').classList.contains('open')) renderGroundStep();
@@ -641,7 +875,7 @@ function setLang(l) {
 }
 
 // init on load
-document.addEventListener('DOMContentLoaded', () => setLang('en'));
+document.addEventListener('DOMContentLoaded', () => setLang('ru'));
 
 // ══════════════════════════════════════════
 //  NAVIGATION
@@ -717,11 +951,10 @@ function stopPanicTimer(){
 function startApp() {
   document.getElementById('landing').style.display = 'none';
   document.getElementById('hpNote').style.display = 'flex';
-  showMood('before', ()=>{
-    document.getElementById('app').classList.add('visible');
-    initCanvas();
-    startBreathing();
-  });
+  document.getElementById('app').classList.add('visible');
+  document.getElementById('aiFab').classList.add('visible');
+  initCanvas();
+  startBreathing();
 }
 
 function startSOS() {
@@ -743,6 +976,7 @@ function startSOS() {
 function dismissSOS() {
   document.getElementById('sosOverlay').classList.remove('visible');
   document.getElementById('app').classList.add('visible');
+  document.getElementById('aiFab').classList.add('visible');
   startBreathing();
   startPanicTimer();
   // AudioContext already running — start pink noise
@@ -756,17 +990,19 @@ function goBack() {
   stopPanicTimer();
   stopAllSounds();
   stopBreathing();
-  showMood('after', ()=>{
-    const ov = document.getElementById('sosOverlay');
-    ov.classList.remove('visible');
-    ['sosL1','sosL2','sosL3','sosReady'].forEach(id=>{
-      const el = document.getElementById(id);
-      if(el) el.classList.remove('show');
-    });
-    document.getElementById('app').classList.remove('visible');
-    document.getElementById('hpNote').style.display = 'none';
-    document.getElementById('landing').style.display = 'flex';
+  aiChatHistory = [];
+  aiOpen = false;
+  document.getElementById('aiPanel').classList.remove('open');
+  document.getElementById('aiFab').classList.remove('visible');
+  const ov = document.getElementById('sosOverlay');
+  ov.classList.remove('visible');
+  ['sosL1','sosL2','sosL3','sosReady'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('show');
   });
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('hpNote').style.display = 'none';
+  document.getElementById('landing').style.display = 'flex';
 }
 
 // ══════════════════════════════════════════
@@ -1176,6 +1412,99 @@ function activateCombo(step){
 function nextGroundStep(){
   if(gStep<gStepsData[lang].length-1){gStep++;renderGroundStep();}
   else{closeGrounding();}
+}
+
+// ══════════════════════════════════════════
+//  AI CHAT
+// ══════════════════════════════════════════
+const AI_SYSTEM_PROMPT = `Ты — цифровой психолог в приложении "Стоп Паника". Помогаешь людям справляться с паническими атаками, тревогой и стрессом.
+
+Отвечай ТОЛЬКО на темы: тревога, панические атаки, дыхательные техники, заземление, стресс, страхи, эмоциональное состояние, психологическое здоровье.
+
+Если пользователь уходит от этих тем — мягко верни его: "Давайте вернёмся к вашему состоянию — как вы себя чувствуете сейчас?"
+
+Стиль: тепло, кратко (2–4 предложения), как заботливый психолог. Не ставь диагнозы, не назначай лекарства. Говори на том языке, на котором пишет пользователь.`;
+
+let aiChatHistory = [];
+let aiOpen = false;
+let aiTyping = false;
+
+function toggleAiChat() {
+  aiOpen = !aiOpen;
+  document.getElementById('aiPanel').classList.toggle('open', aiOpen);
+  if (aiOpen && aiChatHistory.length === 0) {
+    const greeting = t('ai-greeting');
+    aiChatHistory = [{ role: 'assistant', content: greeting }];
+    renderAiMessages();
+    setTimeout(() => document.getElementById('aiInput').focus(), 400);
+  }
+}
+
+function renderAiMessages() {
+  const container = document.getElementById('aiMessages');
+  container.innerHTML = aiChatHistory.map(m =>
+    `<div class="ai-msg ${m.role === 'user' ? 'user' : 'bot'}">${escHtml(m.content)}</div>`
+  ).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+function showAiTyping() {
+  const container = document.getElementById('aiMessages');
+  const el = document.createElement('div');
+  el.className = 'ai-typing'; el.id = 'aiTypingEl';
+  el.innerHTML = '<span></span><span></span><span></span>';
+  container.appendChild(el);
+  container.scrollTop = container.scrollHeight;
+}
+function hideAiTyping() {
+  const el = document.getElementById('aiTypingEl');
+  if (el) el.remove();
+}
+
+function aiKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAiMessage(); }
+}
+
+async function sendAiMessage() {
+  const input = document.getElementById('aiInput');
+  const text = input.value.trim();
+  if (!text || aiTyping) return;
+  input.value = '';
+  aiChatHistory.push({ role: 'user', content: text });
+  renderAiMessages();
+  aiTyping = true;
+  document.getElementById('aiSend').disabled = true;
+  showAiTyping();
+  try {
+    const reply = await callAiApi(aiChatHistory);
+    hideAiTyping();
+    aiChatHistory.push({ role: 'assistant', content: reply });
+    renderAiMessages();
+  } catch(e) {
+    hideAiTyping();
+    aiChatHistory.push({ role: 'assistant', content: '⚠ ' + e.message });
+    renderAiMessages();
+  }
+  aiTyping = false;
+  document.getElementById('aiSend').disabled = false;
+  document.getElementById('aiInput').focus();
+}
+
+async function callAiApi(messages) {
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      messages: [{ role: 'system', content: AI_SYSTEM_PROMPT }, ...messages]
+    })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'HTTP ' + res.status);
+  return data.content;
 }
 </script>
 </body>
