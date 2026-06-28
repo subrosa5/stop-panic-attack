@@ -1551,7 +1551,8 @@ async function sendAiMessage() {
 }
 
 async function callAiApi(messages) {
-  const res = await fetch('/api/chat', {
+  const base = location.protocol === 'file:' ? 'https://stop-panic-attack.vercel.app' : '';
+  const res = await fetch(base + '/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
