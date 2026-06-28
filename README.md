@@ -2,7 +2,7 @@
 
 A free, instant panic relief web app. No sign-up, no install — open and breathe.
 
-**[→ Open the app](https://subrosa5.github.io/stop-panic-attack/)**
+**[→ Open the app](https://stop-panic-attack.vercel.app)**
 
 ---
 
